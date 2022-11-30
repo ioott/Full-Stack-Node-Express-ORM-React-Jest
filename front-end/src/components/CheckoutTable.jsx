@@ -28,7 +28,7 @@ export default function CheckoutTable() {
           </tr>
         </thead>
         <tbody>
-          { cart.map((item, index) => (
+          { cart?.map((item, index) => (
             <tr key={ item.id }>
               <td data-testid={ `${dataId}item-number-${index}` }>{ index + 1 }</td>
               <td data-testid={ `${dataId}name-${index}` }>{ item.name }</td>

@@ -41,7 +41,7 @@ export default function CheckoutForm() {
           id="address"
           value={ address }
           onChange={ (e) => handleAddress(e.target.value) }
-          data-testid={ `${dataId}input_address` }
+          data-testid={ `${dataId}input-address` }
         />
       </label>
       <label htmlFor="address_number">
@@ -49,7 +49,7 @@ export default function CheckoutForm() {
         <input
           type="number"
           id="address_number"
-          data-testid={ `${dataId}input_address-number` }
+          data-testid={ `${dataId}input-address-number` }
           value={ number }
           onChange={ (e) => handleNumber(e.target.value) }
         />

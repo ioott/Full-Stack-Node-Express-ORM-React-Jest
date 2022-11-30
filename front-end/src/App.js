@@ -13,7 +13,7 @@ function App() {
       <Route path="/customer/products" element={ <CustomerProducts /> } />
       <Route path="/register" element={ <Register /> } />
       <Route path="/login" element={ <Login /> } />
-      <Route path="/" element={ <Navigate to="/login" /> } />
+      <Route exact path="/" element={ <Navigate to="/login" /> } />
     </Routes>
   );
 }
