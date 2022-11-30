@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import useLocalStorage from '../hooks/useLocalStorage';
 
 const dataId = 'customer_checkout__element-order-table-';
 
@@ -12,6 +13,12 @@ export default function CheckoutTable() {
     setCart(cartItens);
     setTotalValue(cartValue);
   }, []);
+
+  const handleClick = (index) => {
+    const newCart = cart.filter((item) => item.id !== cart[index].id);
+    setCart(newCart);
+    localStorage.setItem('cartItens', JSON.stringify(newCart));
+  };
 
   return (
     <main>
@@ -40,7 +47,12 @@ export default function CheckoutTable() {
                 { (+item.price * item.quantidade).toFixed(2).replace('.', ',') }
               </td>
               <td data-testid={ `${dataId}remove-${index}` }>
-                <button type="button">Remover</button>
+                <button
+                  type="button"
+                  onClick={ () => handleClick(index) }
+                >
+                  Remover
+                </button>
               </td>
             </tr>
           )) }

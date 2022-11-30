@@ -33,7 +33,7 @@ export default function Products() {
 
   return (
     <main style={ { display: 'flex', 'flex-wrap': 'wrap' } }>
-      { products.map((product) => (
+      { products?.map((product) => (
         <ProductCard
           key={ product.id }
           product={ product }
