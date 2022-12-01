@@ -9,7 +9,6 @@ const addSale = async (req, res) => {
   // const { products, userId, sellerId, totalPrice, deliveryAddress,
   //    deliveryNumber, saleDate, status } = req.body;
   const data = await addNewSale(req.body);
-  console.log(data);
   return res.status(201).json(data.id);
 };
 

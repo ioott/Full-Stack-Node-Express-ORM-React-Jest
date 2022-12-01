@@ -9,7 +9,7 @@ export default class Cart {
   updateTotal(updatedItems) {
     const cart = updatedItems || this.items;
     const newTotal = cart.reduce((acc, curr) => (
-      curr.price * curr.quantidade) + acc, 0);
+      curr.price * curr.quantity) + acc, 0);
     this.setTotal(newTotal);
   }
 
@@ -39,12 +39,12 @@ export default class Cart {
   handleCart(product, inputValue) {
     const obj = {
       ...product,
-      quantidade: Number(inputValue),
+      quantity: Number(inputValue),
     };
     const exists = this.items.find((item) => item.id === obj.id);
     if (!exists) {
       this.newItem(obj);
-    } else if (!!exists && obj.quantidade > 0) {
+    } else if (!!exists && obj.quantity > 0) {
       this.updateItem(obj);
     } else {
       this.deleteItem(obj);

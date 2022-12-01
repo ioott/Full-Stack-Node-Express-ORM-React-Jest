@@ -46,7 +46,10 @@ export default function CheckoutForm() {
       totalPrice,
       deliveryAddress: address,
       deliveryNumber: number,
-    })
+    }, {
+      headers: {
+        Authorization: user.token,
+      } })
       .then((response) => navigate(`/customer/orders/${response.data}`))
       .catch((error) => {
         console.log(error);
