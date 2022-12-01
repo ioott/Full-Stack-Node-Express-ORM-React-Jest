@@ -50,8 +50,9 @@ export default function ProductCard({ product }) {
 
   const handleChange = (e) => {
     const { value } = e.target;
-    if (value > 0) {
+    if (value >= 0) {
       setInputValue(value);
+      cart.handleCart(product, value);
       // const newTotal = Number((value * price).toFixed(2));
       // setTotal(newTotal);
       // ! setCartTotal(newTotal);

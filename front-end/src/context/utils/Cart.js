@@ -39,7 +39,7 @@ export default class Cart {
   handleCart(product, inputValue) {
     const obj = {
       ...product,
-      quantidade: inputValue,
+      quantidade: Number(inputValue),
     };
     const exists = this.items.find((item) => item.id === obj.id);
     if (!exists) {
