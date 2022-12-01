@@ -25,18 +25,36 @@ const attributes = {
   }
 }
 module.exports = (sequelize) => {
-  const model = sequelize.define('SalesProduct', attributes, { tableName: 'salesProducts', timestamps: false })
-  model.associate = (models) => {
+  const SalesProduct = sequelize.define('SalesProduct', attributes, { tableName: 'salesProducts', timestamps: false })
+  SalesProduct.associate = (models) => {
     models.SalesProduct.belongsToMany(models.Sale, {
-      through: model,
-      foreignKey: 'product_id',
-      otherKey: 'sale_id'
+      through: SalesProduct,
+      foreignKey: 'productId',
+      as: 'products',
+      // otherKey: 'saleId'
     });
     models.SalesProduct.belongsToMany(models.Product, {
-      through: model,
-      foreignKey: 'sale_id',
-      otherKey: 'product_id'
+      through: SalesProduct,
+      foreignKey: 'saleId',
+      as: 'sales',
+      // otherKey: 'productId'
     });
   }
-  return model;
+  return SalesProduct;
 };
+
+// PostCategory.associate = (models) => {
+//   models.BlogPost.belongsToMany(models.Category, {
+//   through: PostCategory,
+//   as: 'categories',
+//   foreignKey: "postId",
+//   otherKey: "categoryId",
+//   });
+  
+//   models.Category.belongsToMany(models.BlogPost, {
+//   through: PostCategory,
+//   as: 'posts',
+//   foreignKey: "categoryId",
+//   otherKey: "postId",
+//   });
+//   }; 

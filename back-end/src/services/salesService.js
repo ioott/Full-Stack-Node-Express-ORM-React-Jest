@@ -24,5 +24,36 @@ const addNewSale = async (body) => {
   return data;
 };
 
+const findSaleById = async (id) => {
+  const { dataValues} = await models.Sale.findByPk(id, {
+    include: [{
+      model: models.Product,
+      as: 'products',
+      },
+    ],
+  });
 
-module.exports = { getAllProducts, addNewSale };
+  // const post = await BlogPost.findByPk(id, {
+  //   include: [{
+  //   model: User,
+  //   as: 'user',
+  //   attributes: { exclude: ['password'] },
+  //   },
+  //   {
+  //   model: Category,
+  //   as: 'categories',
+  //   through: {
+  //   model: PostCategory,
+  //   as: 'posts',
+  //   attributes: { exclude: ['postId', 'categoryId'] },
+  //   },
+  //   }],
+  //   });
+  //   return post; 
+
+  return dataValues;
+}
+
+
+
+module.exports = { getAllProducts, addNewSale, findSaleById };

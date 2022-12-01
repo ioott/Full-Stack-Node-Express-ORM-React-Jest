@@ -52,16 +52,16 @@ const attributes = {
   }
 }
 module.exports = (sequelize) => {
-  const model = sequelize.define('Sale', attributes, { tableName: 'sales', timestamps: false })
-  model.associate = (models) => {
+  const Sale = sequelize.define('Sale', attributes, { tableName: 'sales', timestamps: false })
+  Sale.associate = (models) => {
     models.Sale.belongsTo(models.User, {
-      through: model,
-      foreignKey: 'user_id'
+      through: Sale,
+      foreignKey: 'userId'
     });
     models.Sale.belongsTo(models.User, {
-      through: model,
-      foreignKey: 'seller_id'
+      through: Sale,
+      foreignKey: 'sellerId'
     });
   }
-  return model;
+  return Sale;
 };
