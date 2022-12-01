@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import myContext from '../context/myContext';
+
 import ProductCard from './ProductCard';
 
 export default function Products() {
+  const { cart } = useContext(myContext);
   const [products, setProducts] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [cartItem, setCartItem] = useState([]);
+  // const [total, setTotal] = useState(0);
+  // const [cartItem, setCartItem] = useState([]);
   const navigate = useNavigate();
 
   const fetchProducts = async () => {
@@ -19,7 +22,8 @@ export default function Products() {
   };
 
   const handleClick = () => {
-    localStorage.setItem('cartItens', JSON.stringify(cartItem));
+    // localStorage.setItem('cartItens', JSON.stringify(cartItem));
+    // setCart(cartItem);
     navigate('/customer/checkout');
   };
 
@@ -27,9 +31,9 @@ export default function Products() {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('cartValue', total.toFixed(2).replace('.', ','));
-  }, [total]);
+  // useEffect(() => {
+  //   localStorage.setItem('cartValue', cartTotal.toFixed(2).replace('.', ','));
+  // }, [cartTotal]);
 
   return (
     <main style={ { display: 'flex', 'flex-wrap': 'wrap' } }>
@@ -37,21 +41,21 @@ export default function Products() {
         <ProductCard
           key={ product.id }
           product={ product }
-          setTotal={ setTotal }
-          setCartItem={ setCartItem }
-          cartItem={ cartItem }
-          total={ total }
+          // setTotal={ setTotal }
+          // setCart={ setCart }
+          // cartItem={ cartItem }
+          // total={ total }
         />
       )) }
       <button
         type="button"
         onClick={ handleClick }
         data-testid="customer_products__button-cart"
-        disabled={ total < 1 }
+        disabled={ cart.total < 1 }
         style={ { position: 'fixed' } }
       >
         <p data-testid="customer_products__checkout-bottom-value">
-          { total.toFixed(2).replace('.', ',') }
+          { Number(cart.total).toFixed(2).replace('.', ',') }
         </p>
       </button>
     </main>

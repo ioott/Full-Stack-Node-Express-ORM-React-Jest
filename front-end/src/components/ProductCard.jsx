@@ -1,45 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import myContext from '../context/myContext';
 
-export default function ProductCard({ product, setTotal, total, cartItem, setCartItem }) {
+export default function ProductCard({ product }) {
+  const { cart } = useContext(myContext);
   const [inputValue, setInputValue] = useState(0);
   const { id, name, price, urlImage } = product;
 
-  const handleCartItems = async () => {
-    const obj = {
-      ...product,
-      quantidade: inputValue,
-    };
-    const check = cartItem.findIndex((item) => item.id === obj.id);
-    const failCheck = -1;
-    const newItems = cartItem.filter((item) => item.id !== obj.id);
-    if (check !== failCheck) {
-      const filter = [...newItems, obj].filter((item) => item.quantidade !== 0);
-      setCartItem(filter);
-    } else if (check === failCheck && obj.quantidade !== 0) {
-      const filter = [...cartItem, obj].filter((item) => item.quantidade !== 0);
-      setCartItem(filter);
-    }
-  };
+  // const handleCartItems = async () => {
+  //   const obj = {
+  //     ...product,
+  //     quantidade: inputValue,
+  //   };
+  //   const check = cartItem.findIndex((item) => item.id === obj.id);
+  //   const failCheck = -1;
+  //   const newItems = cartItem.filter((item) => item.id !== obj.id);
+  //   if (check !== failCheck) {
+  //     const filter = [...newItems, obj].filter((item) => item.quantidade !== 0);
+  //     setCartItem(filter);
+  //   } else if (check === failCheck && obj.quantidade !== 0) {
+  //     const filter = [...cartItem, obj].filter((item) => item.quantidade !== 0);
+  //     setCartItem(filter);
+  //   }
+  // };
 
-  useEffect(() => {
-    handleCartItems();
-  }, [inputValue]);
+  // useEffect(() => {
+  //   handleCartItems();
+  // }, [inputValue]);
 
   const handleAdd = () => {
-    const sum = Number(total) + Number(price);
-    const value = Number(sum.toFixed(2));
-    setInputValue(+inputValue + 1);
-    handleCartItems();
-    setTotal(value);
+    setInputValue((current) => {
+      const newQty = +current + 1;
+      cart.addItem(price);
+      cart.handleCart(product, newQty);
+      return newQty;
+    });
   };
 
   const handleSub = () => {
     if (inputValue > 0) {
-      const sub = Number(total) - Number(price);
-      const value = Number(sub.toFixed(2));
-      setInputValue(+inputValue - 1);
-      setTotal(value);
+      setInputValue((current) => {
+        const newQty = +current - 1;
+        cart.rmItem(price);
+        cart.handleCart(product, newQty);
+        return newQty;
+      });
     }
   };
 
@@ -47,8 +52,9 @@ export default function ProductCard({ product, setTotal, total, cartItem, setCar
     const { value } = e.target;
     if (value > 0) {
       setInputValue(value);
-      const newTotal = Number((value * price).toFixed(2));
-      setTotal(newTotal);
+      // const newTotal = Number((value * price).toFixed(2));
+      // setTotal(newTotal);
+      // ! setCartTotal(newTotal);
     }
   };
 
@@ -95,8 +101,8 @@ ProductCard.propTypes = {
     price: PropTypes.string,
     urlImage: PropTypes.string,
   }).isRequired,
-  setTotal: PropTypes.func.isRequired,
-  total: PropTypes.number.isRequired,
-  setCartItem: PropTypes.func.isRequired,
-  cartItem: PropTypes.arrayOf(PropTypes.shape({ a: 'a' })).isRequired,
+  // setTotal: PropTypes.func.isRequired,
+  // total: PropTypes.number.isRequired,
+  // setCartItem: PropTypes.func.isRequired,
+  // cartItem: PropTypes.arrayOf(PropTypes.shape({ a: 'a' })).isRequired,
 };
