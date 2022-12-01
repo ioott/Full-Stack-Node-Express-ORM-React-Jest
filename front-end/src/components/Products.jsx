@@ -8,8 +8,6 @@ import ProductCard from './ProductCard';
 export default function Products() {
   const { cart } = useContext(myContext);
   const [products, setProducts] = useState([]);
-  // const [total, setTotal] = useState(0);
-  // const [cartItem, setCartItem] = useState([]);
   const navigate = useNavigate();
 
   const fetchProducts = async () => {
@@ -22,8 +20,6 @@ export default function Products() {
   };
 
   const handleClick = () => {
-    // localStorage.setItem('cartItens', JSON.stringify(cartItem));
-    // setCart(cartItem);
     navigate('/customer/checkout');
   };
 
@@ -31,20 +27,12 @@ export default function Products() {
     fetchProducts();
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem('cartValue', cartTotal.toFixed(2).replace('.', ','));
-  // }, [cartTotal]);
-
   return (
     <main style={ { display: 'flex', 'flex-wrap': 'wrap' } }>
       { products?.map((product) => (
         <ProductCard
           key={ product.id }
           product={ product }
-          // setTotal={ setTotal }
-          // setCart={ setCart }
-          // cartItem={ cartItem }
-          // total={ total }
         />
       )) }
       <button

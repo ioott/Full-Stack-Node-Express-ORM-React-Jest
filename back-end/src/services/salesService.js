@@ -7,15 +7,14 @@ const getAllProducts = async () => {
 
 const addNewSale = async (body) => {
   const { products, userId, sellerId, totalPrice, deliveryAddress,
-    deliveryNumber, saleDate, status } = body;
+    deliveryNumber } = body;
   const data = await models.Sale.create({ 
     userId,
     sellerId,
     totalPrice,
     deliveryAddress,
     deliveryNumber,
-    saleDate,
-    status });
+    });
   products.forEach(async (product) => {
     await models.SalesProduct.create({ 
       saleId: data.id,
@@ -25,11 +24,5 @@ const addNewSale = async (body) => {
   return data;
 };
 
-const getAllSellers = async () => {
-  const data = await models.User.findAll({ 
-    where: { role: 'seller' },
-    attributes: { exclude: ['password', 'id', 'email', 'role'] } });
-  return data;
-};
 
-module.exports = { getAllProducts, addNewSale, getAllSellers };
+module.exports = { getAllProducts, addNewSale };

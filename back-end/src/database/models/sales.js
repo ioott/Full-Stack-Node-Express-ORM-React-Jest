@@ -42,10 +42,12 @@ const attributes = {
   saleDate: {
     allowNull: false,
     type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
     field: 'sale_date'
   },
   status: {
     allowNull: false,
+    defaultValue: 'Pendente',
     type: DataTypes.STRING
   }
 }

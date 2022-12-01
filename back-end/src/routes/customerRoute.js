@@ -8,6 +8,4 @@ router.get('/products', customerController.getAll);
 
 router.post('/checkout', customerController.addSale);
 
-router.get('/checkout', customerController.getSeller);
-
 module.exports = router;

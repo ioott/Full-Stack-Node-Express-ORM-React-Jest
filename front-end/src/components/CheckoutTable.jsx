@@ -1,21 +1,10 @@
 import React, { useContext } from 'react';
 import myContext from '../context/myContext';
 
-// import useLocalStorage from '../hooks/useLocalStorage';
-
 const dataId = 'customer_checkout__element-order-table-';
 
 export default function CheckoutTable() {
   const { cart } = useContext(myContext);
-  // const [cart, setCart] = useState([]);
-  // const [totalValue, setTotalValue] = useState(0);
-
-  // useEffect(() => {
-  // const cartItens = JSON.parse(localStorage.getItem('cartItens'));
-  // const cartValue = localStorage.getItem('cartTotal');
-  // setCart(cartItens);
-  // setTotalValue(cartValue);
-  // }, []);
 
   const handleClick = (item) => {
     cart.deleteItem(item);
@@ -36,7 +25,7 @@ export default function CheckoutTable() {
           </tr>
         </thead>
         <tbody>
-          { cart?.items.map((item, index) => (
+          { cart.items.length > 0 && cart.items.map((item, index) => (
             <tr key={ item.id }>
               <td data-testid={ `${dataId}item-number-${index}` }>{ index + 1 }</td>
               <td data-testid={ `${dataId}name-${index}` }>{ item.name }</td>
