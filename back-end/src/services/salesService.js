@@ -25,7 +25,7 @@ const addNewSale = async (body) => {
 };
 
 const findSaleById = async (id) => {
-  const { dataValues} = await models.Sale.findByPk(id, {
+  const { dataValues } = await models.Sale.findByPk(id, {
     include: [{
       model: models.Product,
       as: 'products',
@@ -52,8 +52,6 @@ const findSaleById = async (id) => {
   //   return post; 
 
   return dataValues;
-}
-
-
+};
 
 module.exports = { getAllProducts, addNewSale, findSaleById };
