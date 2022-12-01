@@ -5,12 +5,11 @@ export default function useLocalStorage(key, initialValue) {
   const [newValue, setNewValue] = useState('');
 
   useEffect(() => {
-    const savedItem = window.localStorage.getItem(key);
+    const savedItem = localStorage.getItem(key);
     if (savedItem === null) {
-      window.localStorage.setItem(key, JSON.stringify(initialValue));
+      localStorage.setItem(key, JSON.stringify(initialValue));
       setSavedValue(initialValue);
     } else {
-      console.log(savedItem);
       setSavedValue(JSON.parse(savedItem));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -19,7 +18,7 @@ export default function useLocalStorage(key, initialValue) {
   useEffect(() => {
     const savedItem = window.localStorage.getItem(key);
     if (newValue !== savedItem && (newValue !== '' && newValue !== null)) {
-      window.localStorage.setItem(key, JSON.stringify(newValue));
+      localStorage.setItem(key, JSON.stringify(newValue));
       setSavedValue(newValue);
     }
   }, [newValue, key]);

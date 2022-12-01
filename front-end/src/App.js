@@ -9,6 +9,7 @@ import CustomerCheckout from './pages/CustomerCheckout';
 function App() {
   return (
     <Routes>
+      <Route path="/customer/orders/:id" />
       <Route path="/customer/checkout" element={ <CustomerCheckout /> } />
       <Route path="/customer/products" element={ <CustomerProducts /> } />
       <Route path="/register" element={ <Register /> } />
