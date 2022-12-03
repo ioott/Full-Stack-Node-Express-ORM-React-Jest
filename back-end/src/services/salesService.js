@@ -16,7 +16,7 @@ const addNewSale = async (body) => {
   };
   const data = await models.Sale.create(saleInfo);
   
-  products.forEach(async (product) => {
+  saleInfo.products.forEach(async (product) => {
     await models.SalesProduct.create({
       saleId: data.id,
       productId: product.id,
@@ -44,29 +44,29 @@ const findSaleById = async (id) => {
           through: { attributes: [] },
         },
       ],
-    }
+    },
   );
 
   return dataValues;
 
-  // const { dataValues } = await models.Sale.findByPk(id, {
-  //   include: [
-  //     {
-  //       model: models.Product,
-  //       as: 'products',
-  //       through: { attributes: ['quantity'] },
-  //     },
-  //   ],
-  // });
-
-  // const productsList = dataValues.products.map((product) => {
-  //   product.dataValues.quantity = product.SalesProduct.quantity;
-  //   delete product.dataValues.SalesProduct;
-  //   return product.dataValues;
-  // });
-  // dataValues.products = productsList;
-
-  // return dataValues;
 };
+// const { dataValues } = await models.Sale.findByPk(id, {
+//   include: [
+//     {
+//       model: models.Product,
+//       as: 'products',
+//       through: { attributes: ['quantity'] },
+//     },
+//   ],
+// });
+
+// const productsList = dataValues.products.map((product) => {
+//   product.dataValues.quantity = product.SalesProduct.quantity;
+//   delete product.dataValues.SalesProduct;
+//   return product.dataValues;
+// });
+// dataValues.products = productsList;
+
+// return dataValues;
 
 module.exports = { getAllProducts, addNewSale, findSaleById };
