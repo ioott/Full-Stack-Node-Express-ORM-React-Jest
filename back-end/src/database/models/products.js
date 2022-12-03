@@ -23,10 +23,5 @@ const attributes = {
 module.exports = (sequelize) => {
   const Product = sequelize.define('Product', attributes, { tableName: 'products', timestamps: false });
 
-  Product.associate = (models) => {
-    Product.hasMany(models.SalesProduct,
-    { foreignKey: 'productId', as: 'products' });
-  }; 
-
   return Product;
 };

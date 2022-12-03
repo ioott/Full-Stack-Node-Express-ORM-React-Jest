@@ -27,17 +27,17 @@ const attributes = {
 module.exports = (sequelize) => {
   const SalesProduct = sequelize.define('SalesProduct', attributes, { tableName: 'salesProducts', timestamps: false })
   SalesProduct.associate = (models) => {
-    models.SalesProduct.belongsToMany(models.Sale, {
+    models.Sale.belongsToMany(models.Product, {
       through: SalesProduct,
       foreignKey: 'productId',
       as: 'products',
-      // otherKey: 'saleId'
+      otherKey: 'saleId'
     });
-    models.SalesProduct.belongsToMany(models.Product, {
+    models.Product.belongsToMany(models.Sale, {
       through: SalesProduct,
       foreignKey: 'saleId',
       as: 'sales',
-      // otherKey: 'productId'
+      otherKey: 'productId'
     });
   }
   return SalesProduct;
