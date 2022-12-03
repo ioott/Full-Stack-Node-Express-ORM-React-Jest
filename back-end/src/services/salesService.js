@@ -1,5 +1,4 @@
-const { Sequelize } = require("../database/models");
-const models = require("../database/models");
+const models = require('../database/models');
 
 const getAllProducts = async () => {
   const data = await models.Product.findAll();
@@ -7,21 +6,16 @@ const getAllProducts = async () => {
 };
 
 const addNewSale = async (body) => {
-  const {
-    products,
-    userId,
-    sellerId,
-    totalPrice,
-    deliveryAddress,
-    deliveryNumber,
-  } = body;
-  const data = await models.Sale.create({
-    userId,
-    sellerId,
-    totalPrice,
-    deliveryAddress,
-    deliveryNumber,
-  });
+  const saleInfo = {
+    products: body.products,
+    userId: body.userId,
+    sellerId: body.sellerId,
+    totalPrice: body.totalPrice,
+    deliveryAddress: body.deliveryAddress,
+    deliveryNumber: body.deliveryNumber,
+  };
+  const data = await models.Sale.create(saleInfo);
+  
   products.forEach(async (product) => {
     await models.SalesProduct.create({
       saleId: data.id,
@@ -41,12 +35,12 @@ const findSaleById = async (id) => {
       include: [
         {
           model: models.Sale,
-          as: "sale",
+          as: 'sale',
           through: { attributes: [] },
         },
         {
           model: models.Product,
-          as: "products",
+          as: 'products',
           through: { attributes: [] },
         },
       ],
