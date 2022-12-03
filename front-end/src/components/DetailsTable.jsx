@@ -1,21 +1,12 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const dataId = 'customer_order_details__element-order-table-';
 
-export default function CheckoutTable() {
-  useEffect(() => {
-    axios.get('http://localhost:3001/seller')
-      .then((response) => {
-        setSellers(response.data);
-        setDropdown(response.data[0].id);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
+export default function DetailsTable({ orderInfo }) {
   return (
     <main>
-      <h1>Finalizar Pedido</h1>
+      <h1>Detalhes do Pedido</h1>
       <table>
         <thead>
           <tr>
@@ -27,16 +18,16 @@ export default function CheckoutTable() {
           </tr>
         </thead>
         <tbody>
-          { cart.items.length > 0 && cart.items.map((item, index) => (
+          { orderInfo?.products.length > 0 && orderInfo.products.map((item, index) => (
             <tr key={ item.id }>
               <td data-testid={ `${dataId}item-number-${index}` }>{ index + 1 }</td>
               <td data-testid={ `${dataId}name-${index}` }>{ item.name }</td>
-              <td data-testid={ `${dataId}quantity-${index}` }>{ item.quantidade }</td>
+              <td data-testid={ `${dataId}quantity-${index}` }>{ item.quantity }</td>
               <td data-testid={ `${dataId}unit-price-${index}` }>
                 { (+item.price).toFixed(2).replace('.', ',') }
               </td>
               <td data-testid={ `${dataId}sub-total-${index}` }>
-                { (+item.price * item.quantidade).toFixed(2).replace('.', ',') }
+                { (+item.price * item.quantity).toFixed(2).replace('.', ',') }
               </td>
             </tr>
           )) }
@@ -44,7 +35,7 @@ export default function CheckoutTable() {
         <tfoot>
           <tr>
             <td data-testid="customer_order_details__element-order-total-price">
-              { Number(cart.total).toFixed(2).replace('.', ',') }
+              { orderInfo.totalPrice }
             </td>
           </tr>
         </tfoot>
@@ -52,3 +43,22 @@ export default function CheckoutTable() {
     </main>
   );
 }
+
+DetailsTable.propTypes = {
+  orderInfo: PropTypes.shape({
+    id: PropTypes.number,
+    userId: PropTypes.number,
+    sellerId: PropTypes.number,
+    totalPrice: PropTypes.string,
+    deliveryAddress: PropTypes.string,
+    deliveryNumber: PropTypes.string,
+    saleDate: PropTypes.string,
+    status: PropTypes.string,
+    products: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      price: PropTypes.string,
+      urlImage: PropTypes.string,
+    })),
+  }).isRequired,
+};
