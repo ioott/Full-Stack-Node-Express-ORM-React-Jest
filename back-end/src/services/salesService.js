@@ -46,9 +46,7 @@ const findSaleById = async (id) => {
       ],
     },
   );
-
   return dataValues;
-
 };
 // const { dataValues } = await models.Sale.findByPk(id, {
 //   include: [
