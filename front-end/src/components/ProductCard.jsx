@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import myContext from '../context/myContext';
 
@@ -7,31 +7,28 @@ export default function ProductCard({ product }) {
   const [inputValue, setInputValue] = useState(0);
   const { id, name, price, urlImage } = product;
 
+  useEffect(() => {
+    cart.handleCart(product, Number(inputValue));
+  }, [inputValue]);
+
   const handleAdd = () => {
-    setInputValue((current) => {
-      const newQty = +current + 1;
-      cart.addItem(price);
-      cart.handleCart(product, newQty);
-      return newQty;
-    });
+    if (inputValue >= 0) {
+      setInputValue(+inputValue + 1);
+    }
   };
 
   const handleSub = () => {
     if (inputValue > 0) {
-      setInputValue((current) => {
-        const newQty = +current - 1;
-        cart.rmItem(price);
-        cart.handleCart(product, newQty);
-        return newQty;
-      });
+      setInputValue(+inputValue - 1);
     }
   };
 
   const handleChange = (e) => {
-    const { value } = e.target;
-    if (value >= 0) {
-      setInputValue(value);
-      cart.handleCart(product, value);
+    const qty = e.target.value;
+    if (qty >= 0) {
+      setInputValue(qty);
+    } else {
+      setInputValue(0);
     }
   };
 
