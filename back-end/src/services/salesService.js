@@ -27,8 +27,7 @@ const addNewSale = async (body) => {
 };
 
 const findSaleById = async (id) => {
-  const { dataValues } = await models.SalesProduct.findOne(
-    {
+  const { dataValues } = await models.SalesProduct.findOne({
       where: { saleId: id },
     },
     {
@@ -44,8 +43,7 @@ const findSaleById = async (id) => {
           through: { attributes: [] },
         },
       ],
-    },
-  );
+  });
   return dataValues;
 };
 // const { dataValues } = await models.Sale.findByPk(id, {
