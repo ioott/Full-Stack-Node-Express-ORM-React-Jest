@@ -42,24 +42,12 @@ export default class Cart {
       quantity: Number(inputValue),
     };
     const exists = this.items.find((item) => item.id === obj.id);
-    if (!exists) {
+    if (!exists && obj.quantity > 0) {
       this.newItem(obj);
     } else if (!!exists && obj.quantity > 0) {
       this.updateItem(obj);
     } else {
       this.deleteItem(obj);
     }
-  }
-
-  addItem(price) {
-    const sum = Number(this.total) + Number(price);
-    const value = Number(sum.toFixed(2));
-    this.setTotal(value);
-  }
-
-  rmItem(price) {
-    const sub = Number(this.total) - Number(price);
-    const value = Number(sub.toFixed(2));
-    this.setTotal(value);
   }
 }
