@@ -38,15 +38,16 @@ export default function CheckoutForm() {
   const handleCheckout = () => {
     const products = cart.items;
     const totalPrice = cart.total;
-
-    axios.post('http://localhost:3001/customer/checkout', {
+    const order = {
       userId: user.id,
       sellerId: dropdown,
       products,
       totalPrice,
       deliveryAddress: address,
       deliveryNumber: number,
-    }, {
+    };
+
+    axios.post('http://localhost:3001/customer/checkout', order, {
       headers: {
         Authorization: user.token,
       } })
