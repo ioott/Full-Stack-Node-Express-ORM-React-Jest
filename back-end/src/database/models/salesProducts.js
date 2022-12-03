@@ -25,7 +25,7 @@ const attributes = {
   }
 }
 module.exports = (sequelize) => {
-  const SalesProduct = sequelize.define('SalesProduct', attributes, { tableName: 'salesProducts', timestamps: false })
+  const SalesProduct = sequelize.define('SalesProduct', attributes, { tableName: 'sales_products', timestamps: false })
   SalesProduct.associate = (models) => {
     models.Sale.belongsToMany(models.Product, {
       through: SalesProduct,
@@ -42,19 +42,3 @@ module.exports = (sequelize) => {
   }
   return SalesProduct;
 };
-
-// PostCategory.associate = (models) => {
-//   models.BlogPost.belongsToMany(models.Category, {
-//   through: PostCategory,
-//   as: 'categories',
-//   foreignKey: "postId",
-//   otherKey: "categoryId",
-//   });
-  
-//   models.Category.belongsToMany(models.BlogPost, {
-//   through: PostCategory,
-//   as: 'posts',
-//   foreignKey: "categoryId",
-//   otherKey: "postId",
-//   });
-//   }; 

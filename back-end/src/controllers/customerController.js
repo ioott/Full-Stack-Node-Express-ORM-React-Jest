@@ -6,8 +6,30 @@ const getAll = async (req, res) => {
 };
 
 const addSale = async (req, res) => {
-  // const { products, userId, sellerId, totalPrice, deliveryAddress,
-  //    deliveryNumber, saleDate, status } = req.body;
+  // {
+  //   "userId": 4,
+  //   "sellerId": 2,
+  //   "products": [
+  //       {
+  //           "id": 1,
+  //           "name": "Skol Lata 250ml",
+  //           "price": "2.20",
+  //           "urlImage": "http://localhost:3001/images/skol_lata_350ml.jpg",
+  //           "quantity": 2
+  //       },
+  //       {
+  //           "id": 2,
+  //           "name": "Heineken 600ml",
+  //           "price": "7.50",
+  //           "urlImage": "http://localhost:3001/images/heineken_600ml.jpg",
+  //           "quantity": 3
+  //       }
+  //   ],
+  //   "totalPrice": 26.9,
+  //   "deliveryAddress": "avenida do teste",
+  //   "deliveryNumber": "42"
+  // }
+
   const data = await salesService.addNewSale(req.body);
   return res.status(201).json(data.id);
 };
