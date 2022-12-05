@@ -28,32 +28,14 @@ products, userId, sellerId, totalPrice, deliveryAddress, deliveryNumber }) => {
 };
 
 const findSaleById = async (id) => {
-//   const { dataValues } = await models.SalesProduct.findAll({
-//       where: { saleId: id },
-//     },
-//     {
-//       include: [
-//         {
-//           model: models.Sale,
-//           as: 'sale',
-//           through: { attributes: [] },
-//         },
-//         {
-//           model: models.Product,
-//           as: 'products',
-//           through: { attributes: [] },
-//         },
-//       ],
-//   });
-//   return dataValues;
-  const { dataValues } = await Sale.findByPk(id, {
-    include: [
-      {
-        model: Product,
-        as: 'products',
-        through: { attributes: ['quantity'] },
-      },
-    ],
+  // const result = await Sale.findByPk(id, {
+  const result = await Sale.findOne({ where: { id } }, {
+    include: 'products',
+    // include: [{
+    //   model: Product,
+    //   as: 'products',
+    //   through: { attributes: ['quantity'] },
+    // }],
   });
 
   // const productsList = dataValues.products.map((product) => {
@@ -62,10 +44,9 @@ const findSaleById = async (id) => {
   //   delete updatedProduct.dataValues.SalesProduct;
   //   return updatedProduct.dataValues;
   // });
-  // console.log(dataValues.products);
   // dataValues.products = productsList;
 
-  return dataValues;
+  return result;
 };
 
 module.exports = { getAllProducts, addNewSale, findSaleById };

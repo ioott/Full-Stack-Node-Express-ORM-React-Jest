@@ -55,12 +55,12 @@ module.exports = (sequelize) => {
   const Sale = sequelize.define('Sale', attributes, { tableName: 'sales', timestamps: false })
   Sale.associate = (models) => {
     models.Sale.belongsTo(models.User, {
-      through: Sale,
-      foreignKey: 'userId'
+      as: 'user'
+      // foreignKey: 'userId'
     });
     models.Sale.belongsTo(models.User, {
-      through: Sale,
-      foreignKey: 'sellerId'
+      as: 'seller'
+      // foreignKey: 'sellerId'
     });
   }
   return Sale;
