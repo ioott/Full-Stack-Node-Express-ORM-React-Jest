@@ -1,68 +1,71 @@
-const models = require('../database/models');
+const { sequelize, Product, Sale, SalesProduct } = require('../database/models');
 
 const getAllProducts = async () => {
-  const data = await models.Product.findAll();
+  const data = await Product.findAll();
   return data;
 };
 
-const addNewSale = async (body) => {
-  const saleInfo = {
-    products: body.products,
-    userId: body.userId,
-    sellerId: body.sellerId,
-    totalPrice: body.totalPrice,
-    deliveryAddress: body.deliveryAddress,
-    deliveryNumber: body.deliveryNumber,
-  };
-  const data = await models.Sale.create(saleInfo);
-  
-  saleInfo.products.forEach(async (product) => {
-    await models.SalesProduct.create({
-      saleId: data.id,
-      productId: product.id,
-      quantity: product.quantity,
-    });
-  });
-  return data;
+const addNewSale = ({
+products, userId, sellerId, totalPrice, deliveryAddress, deliveryNumber }) => {
+  try {
+    return sequelize.transaction(async (t) => {
+      const newOrder = await Sale.create({
+        userId, sellerId, totalPrice, deliveryAddress, deliveryNumber,
+      }, { transaction: t });
+
+      await SalesProduct.bulkCreate(products.map((product) => ({
+        saleId: newOrder.id,
+        productId: product.id,
+        quantity: product.quantity,
+      })), { transaction: t });
+    
+      return newOrder;
+    });  
+  } catch (error) {
+    console.log('ERRO', error);
+    throw error;
+  }
 };
 
 const findSaleById = async (id) => {
-  const { dataValues } = await models.SalesProduct.findOne({
-      where: { saleId: id },
-    },
-    {
-      include: [
-        {
-          model: models.Sale,
-          as: 'sale',
-          through: { attributes: [] },
-        },
-        {
-          model: models.Product,
-          as: 'products',
-          through: { attributes: [] },
-        },
-      ],
+//   const { dataValues } = await models.SalesProduct.findAll({
+//       where: { saleId: id },
+//     },
+//     {
+//       include: [
+//         {
+//           model: models.Sale,
+//           as: 'sale',
+//           through: { attributes: [] },
+//         },
+//         {
+//           model: models.Product,
+//           as: 'products',
+//           through: { attributes: [] },
+//         },
+//       ],
+//   });
+//   return dataValues;
+  const { dataValues } = await Sale.findByPk(id, {
+    include: [
+      {
+        model: Product,
+        as: 'products',
+        through: { attributes: ['quantity'] },
+      },
+    ],
   });
+
+  // const productsList = dataValues.products.map((product) => {
+  //   const updatedProduct = { ...product };
+  //   updatedProduct.dataValues.quantity = product.SalesProduct.quantity;
+  //   delete updatedProduct.dataValues.SalesProduct;
+  //   return updatedProduct.dataValues;
+  // });
+  // console.log(dataValues.products);
+  // dataValues.products = productsList;
+
   return dataValues;
 };
-// const { dataValues } = await models.Sale.findByPk(id, {
-//   include: [
-//     {
-//       model: models.Product,
-//       as: 'products',
-//       through: { attributes: ['quantity'] },
-//     },
-//   ],
-// });
-
-// const productsList = dataValues.products.map((product) => {
-//   product.dataValues.quantity = product.SalesProduct.quantity;
-//   delete product.dataValues.SalesProduct;
-//   return product.dataValues;
-// });
-// dataValues.products = productsList;
-
-// return dataValues;
 
 module.exports = { getAllProducts, addNewSale, findSaleById };
