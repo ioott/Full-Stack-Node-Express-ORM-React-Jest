@@ -1,18 +1,12 @@
-import React, { useContext } from 'react';
-import myContext from '../context/myContext';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const dataId = 'customer_checkout__element-order-table-';
+const dataId = 'customer_order_details__element-order-table-';
 
-export default function CheckoutTable() {
-  const { cart } = useContext(myContext);
-
-  const handleClick = (item) => {
-    cart.deleteItem(item);
-  };
-
+export default function DetailsTable({ orderInfo }) {
   return (
     <main>
-      <h1>Finalizar Pedido</h1>
+      <h1>Detalhes do Pedido</h1>
       <table>
         <thead>
           <tr>
@@ -21,11 +15,10 @@ export default function CheckoutTable() {
             <th>Quantidade</th>
             <th>Valor Unitário</th>
             <th>Sub-total</th>
-            <th>Remover Item</th>
           </tr>
         </thead>
         <tbody>
-          { cart.items.length > 0 && cart.items.map((item, index) => (
+          { orderInfo?.products.length > 0 && orderInfo.products.map((item, index) => (
             <tr key={ item.id }>
               <td data-testid={ `${dataId}item-number-${index}` }>{ index + 1 }</td>
               <td data-testid={ `${dataId}name-${index}` }>{ item.name }</td>
@@ -36,21 +29,13 @@ export default function CheckoutTable() {
               <td data-testid={ `${dataId}sub-total-${index}` }>
                 { (+item.price * item.quantity).toFixed(2).replace('.', ',') }
               </td>
-              <td data-testid={ `${dataId}remove-${index}` }>
-                <button
-                  type="button"
-                  onClick={ () => handleClick(item) }
-                >
-                  Remover
-                </button>
-              </td>
             </tr>
           )) }
         </tbody>
         <tfoot>
           <tr>
-            <td data-testid="customer_checkout__element-order-total-price">
-              { Number(cart.total).toFixed(2).replace('.', ',') }
+            <td data-testid="customer_order_details__element-order-total-price">
+              { orderInfo.totalPrice }
             </td>
           </tr>
         </tfoot>
@@ -58,3 +43,22 @@ export default function CheckoutTable() {
     </main>
   );
 }
+
+DetailsTable.propTypes = {
+  orderInfo: PropTypes.shape({
+    id: PropTypes.number,
+    userId: PropTypes.number,
+    sellerId: PropTypes.number,
+    totalPrice: PropTypes.string,
+    deliveryAddress: PropTypes.string,
+    deliveryNumber: PropTypes.string,
+    saleDate: PropTypes.string,
+    status: PropTypes.string,
+    products: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      price: PropTypes.string,
+      urlImage: PropTypes.string,
+    })),
+  }).isRequired,
+};

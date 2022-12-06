@@ -42,24 +42,26 @@ const attributes = {
   saleDate: {
     allowNull: false,
     type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
     field: 'sale_date'
   },
   status: {
     allowNull: false,
+    defaultValue: 'Pendente',
     type: DataTypes.STRING
   }
 }
 module.exports = (sequelize) => {
-  const model = sequelize.define('Sale', attributes, { tableName: 'sales', timestamps: false })
-  model.associate = (models) => {
+  const Sale = sequelize.define('Sale', attributes, { tableName: 'sales', timestamps: false })
+  Sale.associate = (models) => {
     models.Sale.belongsTo(models.User, {
-      through: model,
-      foreignKey: 'user_id'
+      as: 'user'
+      // foreignKey: 'userId'
     });
     models.Sale.belongsTo(models.User, {
-      through: model,
-      foreignKey: 'seller_id'
+      as: 'seller'
+      // foreignKey: 'sellerId'
     });
   }
-  return model;
+  return Sale;
 };

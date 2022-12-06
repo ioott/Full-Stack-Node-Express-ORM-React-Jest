@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import myContext from '../context/myContext';
 
 const dataId = 'customer_checkout__';
 
 export default function CheckoutForm() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const navigate = useNavigate();
+  const { cart } = useContext(myContext);
+  const [sellers, setSellers] = useState([]);
   const [dropdown, setDropdown] = useState('');
   const [address, setAddress] = useState('');
   const [number, setNumber] = useState('');
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/seller')
+      .then((response) => {
+        setSellers(response.data);
+        setDropdown(response.data[0].id);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   const handleDropdown = (value) => {
     setDropdown(value);
@@ -19,6 +35,28 @@ export default function CheckoutForm() {
     setNumber(value);
   };
 
+  const handleCheckout = () => {
+    const products = cart.items;
+    const totalPrice = cart.total;
+    const order = {
+      userId: user.id,
+      sellerId: dropdown,
+      products,
+      totalPrice,
+      deliveryAddress: address,
+      deliveryNumber: number,
+    };
+
+    axios.post('http://localhost:3001/customer/checkout', order, {
+      headers: {
+        Authorization: user.token,
+      } })
+      .then((response) => navigate(`/customer/orders/${response.data}`))
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <form>
       <label htmlFor="seller_dropdown">
@@ -29,9 +67,9 @@ export default function CheckoutForm() {
           value={ dropdown }
           onChange={ (e) => handleDropdown(e.target.value) }
         >
-          <option value="" selected disabled hidden> </option>
-          <option value="batata">batata</option>
-          <option value="fdasfdas">fdasfdas</option>
+          { sellers.map((item, index) => (
+            <option key={ index } value={ item.id }>{item.name}</option>
+          )) }
         </select>
       </label>
       <label htmlFor="address">
@@ -57,6 +95,7 @@ export default function CheckoutForm() {
       <button
         type="button"
         data-testid={ `${dataId}button-submit-order` }
+        onClick={ handleCheckout }
       >
         FINALIZAR PEDIDO
       </button>

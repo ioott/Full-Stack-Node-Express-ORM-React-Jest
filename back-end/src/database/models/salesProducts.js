@@ -25,18 +25,20 @@ const attributes = {
   }
 }
 module.exports = (sequelize) => {
-  const model = sequelize.define('SalesProduct', attributes, { tableName: 'salesProducts', timestamps: false })
-  model.associate = (models) => {
-    models.SalesProduct.belongsToMany(models.Sale, {
-      through: model,
-      foreignKey: 'product_id',
-      otherKey: 'sale_id'
+  const SalesProduct = sequelize.define('SalesProduct', attributes, { tableName: 'sales_products', timestamps: false })
+  SalesProduct.associate = (models) => {
+    models.Sale.belongsToMany(models.Product, {
+      through: SalesProduct,
+      // foreignKey: 'productId',
+      as: 'sale',
+      // otherKey: 'saleId'
     });
-    models.SalesProduct.belongsToMany(models.Product, {
-      through: model,
-      foreignKey: 'sale_id',
-      otherKey: 'product_id'
+    models.Product.belongsToMany(models.Sale, {
+      through: SalesProduct,
+      // foreignKey: 'saleId',
+      as: 'product',
+      // otherKey: 'productId'
     });
   }
-  return model;
+  return SalesProduct;
 };
