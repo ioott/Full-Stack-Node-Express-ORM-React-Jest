@@ -28,7 +28,7 @@ export default function RegisterForm() {
         baseURL: 'http://localhost:3001/',
       });
       const { data } = await api
-        .post('register', { name, email, password, role: 'costumer' });
+        .post('register', { name, email, password, role: 'customer' });
       localStorage.setItem('user', JSON.stringify(data));
       navigate('/customer/products');
     } catch (err) {

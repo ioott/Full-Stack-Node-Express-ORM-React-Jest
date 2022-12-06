@@ -5,6 +5,11 @@ const getAllProducts = async () => {
   return data;
 };
 
+const getAllOrdersFromUser = async (userId) => {
+  const orders = await Sale.findAll({ where: { userId } });
+  return orders;
+};
+
 const addNewSale = ({
 products, userId, sellerId, totalPrice, deliveryAddress, deliveryNumber }) => {
   try {
@@ -49,4 +54,9 @@ const findSaleById = async (id) => {
   return result;
 };
 
-module.exports = { getAllProducts, addNewSale, findSaleById };
+module.exports = {
+  getAllProducts,
+  addNewSale,
+  findSaleById,
+  getAllOrdersFromUser,
+};
