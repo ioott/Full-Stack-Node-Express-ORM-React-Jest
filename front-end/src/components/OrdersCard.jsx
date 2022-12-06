@@ -1,9 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 export default function OrdersCard({ orderInfo }) {
+  const formatedDate = new Date(orderInfo.saleDate).toLocaleDateString('pt-BR');
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/customer/orders/${orderInfo.id}`);
+  };
+
   return (
-    <div>
+    <button
+      type="button"
+      onClick={ handleClick }
+    >
       {console.log(orderInfo)}
       <h5 data-testid={ `customer_orders__element-order-id-${orderInfo.id}` }>
         Pedido
@@ -13,12 +24,12 @@ export default function OrdersCard({ orderInfo }) {
         {orderInfo.status}
       </p>
       <p data-testid={ `customer_orders__element-order-date-${orderInfo.id}` }>
-        {orderInfo.saleDate}
+        {formatedDate}
       </p>
       <p data-testid={ `customer_orders__element-card-price-${orderInfo.id}` }>
-        {orderInfo.totalPrice}
+        {orderInfo.totalPrice.replace('.', ',') }
       </p>
-    </div>
+    </button>
   );
 }
 
