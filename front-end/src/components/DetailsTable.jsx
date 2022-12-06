@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const dataId = 'customer_order_details__element-order-table-';
+const dataId = 'customer_order_details__element-order-details-';
 
 export default function DetailsTable({ orderInfo }) {
   return (
     <main>
       <h1>Detalhes do Pedido</h1>
+      <h2 dataId={ `${dataId}label-order-id` }>{`Pedido ${orderInfo.id}`}</h2>
+      <h2 dataId={ `${dataId}label-seller-name` }>{`Pedido ${orderInfo.id}`}</h2>
       <table>
         <thead>
           <tr>
