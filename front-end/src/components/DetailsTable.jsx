@@ -2,13 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const dataId = 'customer_order_details__element-order-details-';
+const tableId = 'customer_order_details__element-order-table-';
 
 export default function DetailsTable({ orderInfo }) {
+  const formatedDate = new Date(orderInfo.saleDate).toLocaleDateString('pt-BR');
+
   return (
-    <main>
+    <div>
       <h1>Detalhes do Pedido</h1>
-      <h2 dataId={ `${dataId}label-order-id` }>{`Pedido ${orderInfo.id}`}</h2>
-      <h2 dataId={ `${dataId}label-seller-name` }>{`Pedido ${orderInfo.id}`}</h2>
+      <p data-testid={ `${dataId}label-order-id` }>{`Pedido ${orderInfo.id}`}</p>
+      <p data-testid={ `${dataId}label-seller-name` }>{`${orderInfo.seller.name}`}</p>
+      <p data-testid={ `${dataId}label-order-date` }>{`${formatedDate}`}</p>
+      <p data-testid={ `${dataId}label-delivery-status` }>{`${orderInfo.status}`}</p>
+      <button
+        disabled
+        type="button"
+        data-testid="customer_order_details__button-delivery-check"
+      >
+        Marcar Como Entregue
+      </button>
       <table>
         <thead>
           <tr>
@@ -22,13 +34,13 @@ export default function DetailsTable({ orderInfo }) {
         <tbody>
           { orderInfo?.products.length > 0 && orderInfo.products.map((item, index) => (
             <tr key={ item.id }>
-              <td data-testid={ `${dataId}item-number-${index}` }>{ index + 1 }</td>
-              <td data-testid={ `${dataId}name-${index}` }>{ item.name }</td>
-              <td data-testid={ `${dataId}quantity-${index}` }>{ item.quantity }</td>
-              <td data-testid={ `${dataId}unit-price-${index}` }>
+              <td data-testid={ `${tableId}item-number-${index}` }>{ index + 1 }</td>
+              <td data-testid={ `${tableId}name-${index}` }>{ item.name }</td>
+              <td data-testid={ `${tableId}quantity-${index}` }>{ item.quantity }</td>
+              <td data-testid={ `${tableId}unit-price-${index}` }>
                 { (+item.price).toFixed(2).replace('.', ',') }
               </td>
-              <td data-testid={ `${dataId}sub-total-${index}` }>
+              <td data-testid={ `${tableId}sub-total-${index}` }>
                 { (+item.price * item.quantity).toFixed(2).replace('.', ',') }
               </td>
             </tr>
@@ -37,12 +49,12 @@ export default function DetailsTable({ orderInfo }) {
         <tfoot>
           <tr>
             <td data-testid="customer_order_details__element-order-total-price">
-              { orderInfo.totalPrice }
+              { orderInfo.totalPrice.replace('.', ',') }
             </td>
           </tr>
         </tfoot>
       </table>
-    </main>
+    </div>
   );
 }
 
@@ -62,5 +74,9 @@ DetailsTable.propTypes = {
       price: PropTypes.string,
       urlImage: PropTypes.string,
     })),
+    seller: PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    }).isRequired,
   }).isRequired,
 };
