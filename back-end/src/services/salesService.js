@@ -34,6 +34,11 @@ products, userId, sellerId, totalPrice, deliveryAddress, deliveryNumber }) => {
   }
 };
 
+const updateStatus = async (id, status) => {
+  const result = await Sale.update({ status }, { where: { id } });
+  return result;
+};
+
 const findSaleById = async (id) => {
   const result = await Sale.findOne({ where: { id },
     include: [{ model: Product,
@@ -62,4 +67,5 @@ module.exports = {
   addNewSale,
   findSaleById,
   getAllOrdersFromUser,
+  updateStatus,
 };
