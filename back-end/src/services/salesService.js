@@ -5,8 +5,10 @@ const getAllProducts = async () => {
   return data;
 };
 
-const getAllOrdersFromUser = async (userId) => {
-  const orders = await Sale.findAll({ where: { userId } });
+const getAllOrdersFromUser = async (id, role) => {
+  const orders = role === 'seller'
+  ? await Sale.findAll({ where: { sellerId: id } })
+  : await Sale.findAll({ where: { userId: id } });
   return orders;
 };
 
