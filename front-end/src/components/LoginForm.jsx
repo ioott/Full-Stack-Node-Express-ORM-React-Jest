@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function LoginForm() {
+export default function LoginForm(redirectTarget) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [disabled, setDisabled] = useState(true);
@@ -26,7 +26,8 @@ export default function LoginForm() {
       });
       const { data } = await api.post('login', { email, password });
       localStorage.setItem('user', JSON.stringify(data));
-      navigate('/customer/products');
+      console.log(redirectTarget);
+      navigate(redirectTarget);
     } catch (err) {
       setError(true);
     }

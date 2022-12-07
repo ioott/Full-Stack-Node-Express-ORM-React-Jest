@@ -6,13 +6,14 @@ import Register from './pages/Register';
 import CustomerProducts from './pages/CustomerProducts';
 import CustomerCheckout from './pages/CustomerCheckout';
 import OrderDetails from './pages/OrderDetails';
-import CustomerOrders from './pages/CustomerOrders';
+import Orders from './pages/Orders';
 
 function App() {
   return (
     <Routes>
+      <Route path="/seller/orders" element={ <Orders /> } />
       <Route path="/customer/orders/:id" element={ <OrderDetails /> } />
-      <Route path="/customer/orders" element={ <CustomerOrders /> } />
+      <Route path="/customer/orders" element={ <Orders /> } />
       <Route path="/customer/checkout" element={ <CustomerCheckout /> } />
       <Route path="/customer/products" element={ <CustomerProducts /> } />
       <Route path="/register" element={ <Register /> } />

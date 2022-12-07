@@ -11,7 +11,6 @@ function OrderDetails() {
   useEffect(() => {
     axios.get(`http://localhost:3001/customer/orders/${id}`)
       .then((response) => {
-        console.log(response.data);
         setOrderInfo(response);
       })
       .catch((error) => console.log(error));
