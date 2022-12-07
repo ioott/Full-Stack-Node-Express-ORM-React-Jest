@@ -8,22 +8,29 @@ function OrderDetails() {
   const user = JSON.parse(localStorage.getItem('user'));
   const { id } = useParams();
   const [orderInfo, setOrderInfo] = useState();
+  const [update, setUpdate] = useState(true);
 
   useEffect(() => {
-    if (user.role) {
+    console.log('atualizou');
+    if (user.role && update) {
       axios.get(`http://localhost:3001/${user.role}/orders/${id}`)
         .then((response) => {
+          setUpdate(false);
           setOrderInfo(response);
         })
         .catch((error) => console.log(error));
     }
-  }, [id, user.role]);
+  }, [id, user.role, update]);
 
   return (
     <div>
       <NavBar />
       { orderInfo?.data && (
-        <DetailsTable orderInfo={ orderInfo.data } role={ user.role } />) }
+        <DetailsTable
+          orderInfo={ orderInfo.data }
+          role={ user.role }
+          setUpdate={ setUpdate }
+        />) }
     </div>
   );
 }

@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-export default function DetailsTable({ orderInfo, role }) {
+export default function DetailsTable({ orderInfo, role, setUpdate }) {
+  const [order, setOrder] = useState();
   const dataId = `${role}_order_details__element-order-details-`;
   const tableId = `${role}_order_details__element-order-table-`;
   const formatedDate = new Date(orderInfo.saleDate).toLocaleDateString('pt-BR');
+
+  useEffect(() => {
+    setOrder(orderInfo);
+  }, [orderInfo]);
 
   const handleClick = (e) => {
     const statusType = {
@@ -13,21 +18,25 @@ export default function DetailsTable({ orderInfo, role }) {
       'SAIU PARA ENTREGA': 'Em Trânsito',
       'MARCAR COMO ENTREGUE': 'Entregue',
     };
-    axios.patch(`http://localhost:3001/${role}/orders/${orderInfo.id}`, {
-      data: { status: statusType[e.target.innerHTML] } })
-      .then((response) => setOrderInfo(response))
+    axios.patch(`http://localhost:3001/${role}/orders/${order.id}`, {
+      status: statusType[e.target.innerHTML] })
+      .then((response) => {
+        setUpdate(true);
+        setOrder(response.data);
+      })
       .catch((error) => console.log(error));
   };
 
   return (
     <div>
       <h1>Detalhes do Pedido</h1>
-      <p data-testid={ `${dataId}label-order-id` }>{`Pedido ${orderInfo.id}`}</p>
-      <p data-testid={ `${dataId}label-seller-name` }>{`${orderInfo.seller.name}`}</p>
+      <p data-testid={ `${dataId}label-order-id` }>{`Pedido ${order?.id}`}</p>
+      <p data-testid={ `${dataId}label-seller-name` }>{`${order?.seller?.name}`}</p>
       <p data-testid={ `${dataId}label-order-date` }>{`${formatedDate}`}</p>
-      <p data-testid={ `${dataId}label-delivery-status` }>{`${orderInfo.status}`}</p>
+      <p data-testid={ `${dataId}label-delivery-status` }>{`${order?.status}`}</p>
       { role === 'seller' && (
         <button
+          disabled={ order?.status !== 'Pendente' }
           type="button"
           data-testid="seller_order_details__button-preparing-check"
           onClick={ handleClick }
@@ -36,7 +45,7 @@ export default function DetailsTable({ orderInfo, role }) {
         </button>
       )}
       <button
-        disabled={ orderInfo.status !== 'Em Trânsito' }
+        disabled={ order?.status !== 'Preparando' }
         type="button"
         data-testid={ `${role}_order_details__button-${role === 'seller'
           ? 'dispatch' : 'delivery'}-check` }
@@ -55,7 +64,7 @@ export default function DetailsTable({ orderInfo, role }) {
           </tr>
         </thead>
         <tbody>
-          { orderInfo?.products.length > 0 && orderInfo.products.map((item, index) => (
+          { order?.products?.length > 0 && order?.products.map((item, index) => (
             <tr key={ item.id }>
               <td data-testid={ `${tableId}item-number-${index}` }>{ index + 1 }</td>
               <td data-testid={ `${tableId}name-${index}` }>{ item.name }</td>
@@ -72,7 +81,7 @@ export default function DetailsTable({ orderInfo, role }) {
         <tfoot>
           <tr>
             <td data-testid={ `${role}_order_details__element-order-total-price` }>
-              { orderInfo.totalPrice.replace('.', ',') }
+              { order?.totalPrice?.replace('.', ',') }
             </td>
           </tr>
         </tfoot>
@@ -82,6 +91,7 @@ export default function DetailsTable({ orderInfo, role }) {
 }
 
 DetailsTable.propTypes = {
+  setUpdate: PropTypes.func.isRequired,
   role: PropTypes.string.isRequired,
   orderInfo: PropTypes.shape({
     id: PropTypes.number,
