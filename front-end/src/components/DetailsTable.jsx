@@ -1,10 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 export default function DetailsTable({ orderInfo, role }) {
   const dataId = `${role}_order_details__element-order-details-`;
   const tableId = `${role}_order_details__element-order-table-`;
   const formatedDate = new Date(orderInfo.saleDate).toLocaleDateString('pt-BR');
+
+  const handleClick = (e) => {
+    const statusType = {
+      'PREPARAR PEDIDO': 'Preparando',
+      'SAIU PARA ENTREGA': 'Em Trânsito',
+      'MARCAR COMO ENTREGUE': 'Entregue',
+    };
+    axios.patch(`http://localhost:3001/${role}/orders/${orderInfo.id}`, {
+      data: { status: statusType[e.target.innerHTML] } })
+      .then((response) => setOrderInfo(response))
+      .catch((error) => console.log(error));
+  };
 
   return (
     <div>
@@ -17,14 +30,17 @@ export default function DetailsTable({ orderInfo, role }) {
         <button
           type="button"
           data-testid="seller_order_details__button-preparing-check"
+          onClick={ handleClick }
         >
           PREPARAR PEDIDO
         </button>
       )}
       <button
+        disabled={ orderInfo.status !== 'Em Trânsito' }
         type="button"
         data-testid={ `${role}_order_details__button-${role === 'seller'
           ? 'dispatch' : 'delivery'}-check` }
+        onClick={ handleClick }
       >
         {`${role === 'seller' ? 'SAIU PARA ENTREGA' : 'MARCAR COMO ENTREGUE'}`}
       </button>
