@@ -4,6 +4,8 @@ require('express-async-errors');
 
 const router = express.Router();
 
+router.get('/:id/orders/', customerController.getAllOrdersFromUser);
+
 router.get('/products', customerController.getAll);
 
 router.post('/checkout', customerController.addSale);

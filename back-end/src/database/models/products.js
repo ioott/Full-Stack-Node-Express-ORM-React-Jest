@@ -23,5 +23,10 @@ const attributes = {
 module.exports = (sequelize) => {
   const Product = sequelize.define('Product', attributes, { tableName: 'products', timestamps: false });
 
+  // Product.associate = (models) => {
+  //   models.Product.hasMany(models.SalesProduct,
+  //   { foreignKey: 'saleId', as: 'saleProduct' });
+  // }; 
+
   return Product;
 };

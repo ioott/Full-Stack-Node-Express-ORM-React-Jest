@@ -1,8 +1,13 @@
-const { sequelize, Product, Sale, SalesProduct } = require('../database/models');
+const { sequelize, Product, Sale, SalesProduct, User } = require('../database/models');
 
 const getAllProducts = async () => {
   const data = await Product.findAll();
   return data;
+};
+
+const getAllOrdersFromUser = async (userId) => {
+  const orders = await Sale.findAll({ where: { userId } });
+  return orders;
 };
 
 const addNewSale = ({
@@ -28,25 +33,31 @@ products, userId, sellerId, totalPrice, deliveryAddress, deliveryNumber }) => {
 };
 
 const findSaleById = async (id) => {
-  // const result = await Sale.findByPk(id, {
-  const result = await Sale.findOne({ where: { id } }, {
-    include: 'products',
-    // include: [{
-    //   model: Product,
-    //   as: 'products',
-    //   through: { attributes: ['quantity'] },
-    // }],
+  const result = await Sale.findOne({ where: { id },
+    include: [{ model: Product,
+      as: 'products',
+      through: { attributes: ['quantity'] },
+    }, { model: User,
+      as: 'seller',
+      attributes: { exclude: ['password', 'email', 'role'] },
+    }],
+    attributes: { exclude: ['sellerId'] },
   });
-
-  // const productsList = dataValues.products.map((product) => {
-  //   const updatedProduct = { ...product };
-  //   updatedProduct.dataValues.quantity = product.SalesProduct.quantity;
-  //   delete updatedProduct.dataValues.SalesProduct;
-  //   return updatedProduct.dataValues;
-  // });
-  // dataValues.products = productsList;
+  
+  const productsList = result.products.map((product) => {
+    const updatedProduct = product;
+    updatedProduct.dataValues.quantity = product.SalesProduct.dataValues.quantity;
+    delete updatedProduct.dataValues.SalesProduct;
+    return updatedProduct;
+  });
+  result.dataValues.products = productsList;
 
   return result;
 };
 
-module.exports = { getAllProducts, addNewSale, findSaleById };
+module.exports = {
+  getAllProducts,
+  addNewSale,
+  findSaleById,
+  getAllOrdersFromUser,
+};
