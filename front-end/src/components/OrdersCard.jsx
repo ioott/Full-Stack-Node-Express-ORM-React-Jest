@@ -8,7 +8,6 @@ export default function OrdersCard({ orderInfo, role }) {
   const testId = `${role}_orders__element-`;
 
   const handleClick = () => {
-    console.log(role);
     navigate(`/${role}/orders/${orderInfo.id}`);
   };
 

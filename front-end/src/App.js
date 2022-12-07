@@ -11,6 +11,7 @@ import Orders from './pages/Orders';
 function App() {
   return (
     <Routes>
+      <Route path="/seller/orders/:id" element={ <OrderDetails /> } />
       <Route path="/seller/orders" element={ <Orders /> } />
       <Route path="/customer/orders/:id" element={ <OrderDetails /> } />
       <Route path="/customer/orders" element={ <Orders /> } />

@@ -5,21 +5,25 @@ import NavBar from '../components/NavBar';
 import DetailsTable from '../components/DetailsTable';
 
 function OrderDetails() {
+  const user = JSON.parse(localStorage.getItem('user'));
   const { id } = useParams();
   const [orderInfo, setOrderInfo] = useState();
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/customer/orders/${id}`)
-      .then((response) => {
-        setOrderInfo(response);
-      })
-      .catch((error) => console.log(error));
-  }, [id]);
+    if (user.role) {
+      axios.get(`http://localhost:3001/${user.role}/orders/${id}`)
+        .then((response) => {
+          setOrderInfo(response);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [id, user.role]);
 
   return (
     <div>
       <NavBar />
-      { orderInfo?.data && <DetailsTable orderInfo={ orderInfo.data } /> }
+      { orderInfo?.data && (
+        <DetailsTable orderInfo={ orderInfo.data } role={ user.role } />) }
     </div>
   );
 }

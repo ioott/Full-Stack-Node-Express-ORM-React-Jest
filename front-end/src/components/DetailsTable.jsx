@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const dataId = 'customer_order_details__element-order-details-';
-const tableId = 'customer_order_details__element-order-table-';
-
-export default function DetailsTable({ orderInfo }) {
+export default function DetailsTable({ orderInfo, role }) {
+  const dataId = `${role}_order_details__element-order-details-`;
+  const tableId = `${role}_order_details__element-order-table-`;
   const formatedDate = new Date(orderInfo.saleDate).toLocaleDateString('pt-BR');
 
   return (
@@ -14,12 +13,20 @@ export default function DetailsTable({ orderInfo }) {
       <p data-testid={ `${dataId}label-seller-name` }>{`${orderInfo.seller.name}`}</p>
       <p data-testid={ `${dataId}label-order-date` }>{`${formatedDate}`}</p>
       <p data-testid={ `${dataId}label-delivery-status` }>{`${orderInfo.status}`}</p>
+      { role === 'seller' && (
+        <button
+          type="button"
+          data-testid="seller_order_details__button-preparing-check"
+        >
+          PREPARAR PEDIDO
+        </button>
+      )}
       <button
-        disabled
         type="button"
-        data-testid="customer_order_details__button-delivery-check"
+        data-testid={ `${role}_order_details__button-${role === 'seller'
+          ? 'dispatch' : 'delivery'}-check` }
       >
-        Marcar Como Entregue
+        {`${role === 'seller' ? 'SAIU PARA ENTREGA' : 'MARCAR COMO ENTREGUE'}`}
       </button>
       <table>
         <thead>
@@ -48,7 +55,7 @@ export default function DetailsTable({ orderInfo }) {
         </tbody>
         <tfoot>
           <tr>
-            <td data-testid="customer_order_details__element-order-total-price">
+            <td data-testid={ `${role}_order_details__element-order-total-price` }>
               { orderInfo.totalPrice.replace('.', ',') }
             </td>
           </tr>
@@ -59,6 +66,7 @@ export default function DetailsTable({ orderInfo }) {
 }
 
 DetailsTable.propTypes = {
+  role: PropTypes.string.isRequired,
   orderInfo: PropTypes.shape({
     id: PropTypes.number,
     userId: PropTypes.number,
