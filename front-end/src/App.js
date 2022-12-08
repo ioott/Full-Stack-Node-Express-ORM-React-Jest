@@ -9,7 +9,6 @@ import OrderDetails from './pages/OrderDetails';
 import Orders from './pages/Orders';
 import Admin from './pages/Admin';
 
-
 function App() {
   return (
     <Routes>
