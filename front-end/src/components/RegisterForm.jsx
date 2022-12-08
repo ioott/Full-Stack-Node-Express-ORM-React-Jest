@@ -3,12 +3,17 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function RegisterForm() {
+  const user = JSON.parse(localStorage.getItem('user'));
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [dropdown, setDropdown] = useState('customer');
   const [disabled, setDisabled] = useState(true);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+
+  const adminTestId = 'admin_manage__';
+  const commonTestId = 'common_register__';
 
   useEffect(() => {
     setError(false);
@@ -28,9 +33,18 @@ export default function RegisterForm() {
         baseURL: 'http://localhost:3001/',
       });
       const { data } = await api
-        .post('register', { name, email, password, role: 'customer' });
-      localStorage.setItem('user', JSON.stringify(data));
-      navigate('/customer/products');
+        .post('register', { name, email, password, role: dropdown });
+      if (user?.role === 'administrator') {
+        setEmail('');
+        setName('');
+        setPassword('');
+        setDropdown('customer');
+        setDisabled(true);
+        setError(false);
+      } else {
+        localStorage.setItem('user', JSON.stringify(data));
+        navigate('/customer/products');
+      }
     } catch (err) {
       setError(true);
     }
@@ -42,7 +56,8 @@ export default function RegisterForm() {
         <label htmlFor="name">
           Nome
           <input
-            data-testid="common_register__input-name"
+            data-testid={ `${user?.role === 'administrator'
+              ? adminTestId : commonTestId}input-name` }
             id="name"
             type="text"
             placeholder="João da Silva"
@@ -53,7 +68,8 @@ export default function RegisterForm() {
         <label htmlFor="email">
           Email
           <input
-            data-testid="common_register__input-email"
+            data-testid={ `${user?.role === 'administrator'
+              ? adminTestId : commonTestId}input-email` }
             id="email"
             type="email"
             placeholder="email@trybeer.com"
@@ -64,7 +80,8 @@ export default function RegisterForm() {
         <label htmlFor="password">
           Senha
           <input
-            data-testid="common_register__input-password"
+            data-testid={ `${user?.role === 'administrator'
+              ? adminTestId : commonTestId}input-password` }
             id="password"
             type="password"
             placeholder="**********"
@@ -72,8 +89,21 @@ export default function RegisterForm() {
             onChange={ (e) => setPassword(e.target.value) }
           />
         </label>
+        { user?.role === 'administrator' && (
+          <select
+            id="seller_dropdown"
+            data-testid="admin_manage__select-role"
+            value={ dropdown }
+            onChange={ (e) => setDropdown(e.target.value) }
+          >
+            { ['customer', 'administrator', 'seller'].map((item, index) => (
+              <option key={ index } value={ item }>{item}</option>
+            )) }
+          </select>
+        )}
         <button
-          data-testid="common_register__button-register"
+          data-testid={ `${user?.role === 'administrator'
+            ? adminTestId : commonTestId}button-register` }
           type="button"
           disabled={ disabled }
           onClick={ handleClick }
@@ -82,7 +112,10 @@ export default function RegisterForm() {
         </button>
         { error
         && (
-          <p data-testid="common_register__element-invalid_register">
+          <p
+            data-testid={ `${user?.role === 'administrator'
+              ? adminTestId : commonTestId}element-invalid_register` }
+          >
             Usuário ja existente
           </p>
         ) }
