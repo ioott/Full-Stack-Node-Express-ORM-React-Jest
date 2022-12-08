@@ -13,6 +13,7 @@ export default function DetailsTable({ orderInfo, role, setUpdate }) {
   }, [orderInfo]);
 
   const handleClick = (e) => {
+    console.log(role);
     const statusType = {
       'PREPARAR PEDIDO': 'Preparando',
       'SAIU PARA ENTREGA': 'Em Trânsito',
@@ -44,15 +45,25 @@ export default function DetailsTable({ orderInfo, role, setUpdate }) {
           PREPARAR PEDIDO
         </button>
       )}
-      <button
-        disabled={ order?.status !== 'Preparando' }
-        type="button"
-        data-testid={ `${role}_order_details__button-${role === 'seller'
-          ? 'dispatch' : 'delivery'}-check` }
-        onClick={ handleClick }
-      >
-        {`${role === 'seller' ? 'SAIU PARA ENTREGA' : 'MARCAR COMO ENTREGUE'}`}
-      </button>
+      { role === 'customer' ? (
+        <button
+          disabled={ order?.status !== 'Em Trânsito' }
+          type="button"
+          data-testid="customer_order_details__button-delivery-check"
+          onClick={ handleClick }
+        >
+          MARCAR COMO ENTREGUE
+        </button>
+      ) : (
+        <button
+          disabled={ order?.status !== 'Preparando' }
+          type="button"
+          data-testid="seller_order_details__button-dispatch-check"
+          onClick={ handleClick }
+        >
+          SAIU PARA ENTREGA
+        </button>
+      )}
       <table>
         <thead>
           <tr>

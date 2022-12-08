@@ -12,4 +12,6 @@ router.post('/checkout', salesController.addSale);
 
 router.get('/orders/:id', salesController.findSaleById);
 
+router.patch('/orders/:id', salesController.updateStatus);
+
 module.exports = router;

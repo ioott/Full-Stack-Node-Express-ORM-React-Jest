@@ -11,7 +11,6 @@ function OrderDetails() {
   const [update, setUpdate] = useState(true);
 
   useEffect(() => {
-    console.log('atualizou');
     if (user.role && update) {
       axios.get(`http://localhost:3001/${user.role}/orders/${id}`)
         .then((response) => {
