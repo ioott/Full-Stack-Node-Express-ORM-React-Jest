@@ -9,6 +9,7 @@ import OrderDetails from './pages/OrderDetails';
 import Orders from './pages/Orders';
 import Admin from './pages/Admin';
 
+
 function App() {
   return (
     <Routes>
@@ -16,7 +17,7 @@ function App() {
       <Route path="/seller/orders/:id" element={ <OrderDetails /> } />
       <Route path="/seller/orders" element={ <Orders /> } />
       <Route path="/customer/orders/:id" element={ <OrderDetails /> } />
-      <Route path="/customer/orders" element={ <Orders /> } />
+      <Route path="/customer/orders" element={ <CustomerOrders /> } />
       <Route path="/customer/checkout" element={ <CustomerCheckout /> } />
       <Route path="/customer/products" element={ <CustomerProducts /> } />
       <Route path="/register" element={ <Register /> } />
