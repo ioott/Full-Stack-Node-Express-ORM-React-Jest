@@ -7,10 +7,12 @@ import CustomerProducts from './pages/CustomerProducts';
 import CustomerCheckout from './pages/CustomerCheckout';
 import OrderDetails from './pages/OrderDetails';
 import Orders from './pages/Orders';
+import Admin from './pages/Admin';
 
 function App() {
   return (
     <Routes>
+      <Route path="/admin/manage" element={ <Admin /> } />
       <Route path="/seller/orders/:id" element={ <OrderDetails /> } />
       <Route path="/seller/orders" element={ <Orders /> } />
       <Route path="/customer/orders/:id" element={ <OrderDetails /> } />
