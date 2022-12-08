@@ -5,7 +5,7 @@ const validateToken = async (req, res, next) => {
   const { authorization } = req.headers;
   const tokenData = await jwt.tokenValidation(authorization);
  
-  if (tokenData.role === 'administrator') {
+  if (tokenData.info.role === 'administrator') {
     return next();
   }
   throwCustomError(401, 'não autorizado');
