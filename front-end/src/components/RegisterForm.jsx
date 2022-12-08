@@ -118,7 +118,8 @@ export default function RegisterForm() {
         && (
           <p
             data-testid={ `${user?.role === 'administrator'
-              ? adminTestId : commonTestId}element-invalid_register` }
+              ? adminTestId : commonTestId}element-invalid${user?.role === 'administrator'
+              ? '-' : '_'}register` } // essa maluquice é culpa da trybe
           >
             Usuário ja existente
           </p>
