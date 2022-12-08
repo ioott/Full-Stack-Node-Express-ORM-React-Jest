@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 export default function NavBar() {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userName = user?.name;
   const [name, setName] = useState('');
 
   const handleLogout = () => localStorage.clear();
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    const parse = JSON.parse(user);
-    const userName = parse.name;
     setName(userName);
-  }, []);
+  }, [userName]);
 
   const baseURL = 'http://localhost:3000/';
 
@@ -19,7 +18,7 @@ export default function NavBar() {
       <ul>
         <li>
           <a
-            href={ `${baseURL}customer/products` }
+            href={ `${baseURL}${user?.role}/products` }
             data-testid="customer_products__element-navbar-link-products"
           >
             Produtos
@@ -27,7 +26,7 @@ export default function NavBar() {
         </li>
         <li>
           <a
-            href={ `${baseURL}customer/orders` }
+            href={ `${baseURL}${user?.role}/orders` }
             data-testid="customer_products__element-navbar-link-orders"
           >
             Pedidos
