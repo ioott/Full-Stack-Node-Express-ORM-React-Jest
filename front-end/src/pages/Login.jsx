@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 
 export default function Login() {
   const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
-  const redirectTarget = {
+  const redirectTarget = useMemo(() => ({
     customer: '/customer/products',
     seller: '/seller/orders',
     administrator: '/admin/manage',
-  };
+  }), []);
 
   useEffect(() => {
     if (user?.role) {
