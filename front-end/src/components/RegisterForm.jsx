@@ -33,7 +33,11 @@ export default function RegisterForm() {
         baseURL: 'http://localhost:3001/',
       });
       const { data } = await api
-        .post('register', { name, email, password, role: dropdown });
+        .post('register', { name, email, password, role: dropdown }, {
+          headers: {
+            Authorization: user.token,
+          },
+        });
       if (user?.role === 'administrator') {
         setEmail('');
         setName('');
