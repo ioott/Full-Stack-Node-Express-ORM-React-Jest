@@ -5,10 +5,8 @@ const getAllProducts = async () => {
   return data;
 };
 
-const getAllOrdersFromUser = async (id, role) => {
-  const orders = role === 'seller'
-  ? await Sale.findAll({ where: { sellerId: id } })
-  : await Sale.findAll({ where: { userId: id } });
+const getAllOrdersFromUser = async (userId) => {
+  const orders = await Sale.findAll({ where: { userId } });
   return orders;
 };
 
@@ -32,11 +30,6 @@ products, userId, sellerId, totalPrice, deliveryAddress, deliveryNumber }) => {
     console.log('ERRO', error);
     throw error;
   }
-};
-
-const updateStatus = async (id, status) => {
-  const result = await Sale.update({ status }, { where: { id } });
-  return result;
 };
 
 const findSaleById = async (id) => {
@@ -67,5 +60,4 @@ module.exports = {
   addNewSale,
   findSaleById,
   getAllOrdersFromUser,
-  updateStatus,
 };
