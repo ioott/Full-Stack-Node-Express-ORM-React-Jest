@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-export default function RegisterForm() {
+export default function RegisterForm({ setRefresh }) {
   const user = JSON.parse(localStorage.getItem('user'));
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -45,6 +46,7 @@ export default function RegisterForm() {
         setDropdown('customer');
         setDisabled(true);
         setError(false);
+        setRefresh(true);
       } else {
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/customer/products');
@@ -128,3 +130,7 @@ export default function RegisterForm() {
     </div>
   );
 }
+
+RegisterForm.propTypes = {
+  setRefresh: PropTypes.func.isRequired,
+};

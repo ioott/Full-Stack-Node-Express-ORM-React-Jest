@@ -1,19 +1,25 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
-function UserTable() {
+function UserTable({ refresh, setRefresh }) {
   const { token } = JSON.parse(localStorage.getItem('user'));
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/users/', {
-      headers: {
-        Authorization: token,
-      },
-    })
-      .then((response) => setUsers(response.data))
-      .catch((e) => console.log(e));
-  }, [token]);
+    if (refresh === true) {
+      axios.get('http://localhost:3001/users/', {
+        headers: {
+          Authorization: token,
+        },
+      })
+        .then((response) => {
+          setUsers(response.data);
+          setRefresh(false);
+        })
+        .catch((e) => console.log(e));
+    }
+  }, [token, refresh, setRefresh]);
 
   const handleClick = (id) => {
     axios.delete(`http://localhost:3001/users/${id}`, {
@@ -25,6 +31,7 @@ function UserTable() {
         setUsers((curr) => (
           curr.filter((user) => user.id !== id)
         ));
+        setRefresh(true);
       })
       .catch((e) => console.log(e));
   };
@@ -79,5 +86,10 @@ function UserTable() {
     </div>
   );
 }
+
+UserTable.propTypes = {
+  refresh: PropTypes.bool.isRequired,
+  setRefresh: PropTypes.func.isRequired,
+};
 
 export default UserTable;
