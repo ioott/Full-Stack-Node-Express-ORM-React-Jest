@@ -36,7 +36,7 @@ export default function RegisterForm({ setRefresh }) {
       const { data } = await api
         .post('register', { name, email, password, role: dropdown }, {
           headers: {
-            Authorization: user.token,
+            Authorization: user?.token,
           },
         });
       if (user?.role === 'administrator') {
@@ -52,6 +52,7 @@ export default function RegisterForm({ setRefresh }) {
         navigate('/customer/products');
       }
     } catch (err) {
+      console.log(err);
       setError(true);
     }
   };
@@ -108,8 +109,10 @@ export default function RegisterForm({ setRefresh }) {
           </select>
         )}
         <button
-          data-testid={ `${user?.role === 'administrator'
-            ? adminTestId : commonTestId}button-register` }
+          data-testid={
+            `${user?.role === 'administrator'
+              ? adminTestId : commonTestId}button-register`
+          }
           type="button"
           disabled={ disabled }
           onClick={ handleClick }
@@ -131,6 +134,10 @@ export default function RegisterForm({ setRefresh }) {
   );
 }
 
+RegisterForm.defaultProps = {
+  setRefresh: () => {},
+};
+
 RegisterForm.propTypes = {
-  setRefresh: PropTypes.func.isRequired,
+  setRefresh: PropTypes.func,
 };

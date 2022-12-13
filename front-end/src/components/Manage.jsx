@@ -7,7 +7,7 @@ function Manage() {
 
   return (
     <div>
-      <RegisterForm refresh={ refresh } setRefresh={ setRefresh } />
+      <RegisterForm setRefresh={ setRefresh } />
       <UserTable refresh={ refresh } setRefresh={ setRefresh } />
     </div>
   );
