@@ -15,4 +15,8 @@ const create = async (req, res) => {
   return res.status(201).json({ ...info, id, token });
 };
 
-module.exports = { create };
+const adminCreate = async (req, res) => {
+  create(req, res);
+};
+
+module.exports = { create, adminCreate };

@@ -1,15 +1,17 @@
 const express = require('express');
-const customerController = require('../controllers/customerController');
+const salesController = require('../controllers/salesController');
 require('express-async-errors');
 
 const router = express.Router();
 
-router.get('/:id/orders/', customerController.getAllOrdersFromUser);
+router.get('/:id/orders/', salesController.getAllOrdersFromUser);
 
-router.get('/products', customerController.getAll);
+router.get('/products', salesController.getAll);
 
-router.post('/checkout', customerController.addSale);
+router.post('/checkout', salesController.addSale);
 
-router.get('/orders/:id', customerController.findSaleById);
+router.get('/orders/:id', salesController.findSaleById);
+
+router.patch('/orders/:id', salesController.updateStatus);
 
 module.exports = router;
